@@ -25,4 +25,10 @@ public class Player extends Creature{
         this.serial = serial;
         System.out.println("setID");
     }
+
+    // public static void update(int dx, int dy)
+    // {
+    //     move(dx, dy);
+    // }
+    
 }

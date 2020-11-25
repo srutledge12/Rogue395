@@ -25,7 +25,7 @@ public class Test implements Runnable
     @Override
     public void run()
     {
-        displayGrid.fireUp();
+        // displayGrid.fireUp();
         for (int step = 1; step < WIDTH / 2; step *= 2)
         {
             for (int i = 0; i < WIDTH; i += step) {

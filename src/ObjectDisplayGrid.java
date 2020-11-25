@@ -14,9 +14,9 @@ public class ObjectDisplayGrid extends JFrame implements KeyListener, InputSubje
     private List<InputObserver> inputObservers = null;
     private static int height;
     private static int width;
-    private ArrayList<Displayable> dis_object = new ArrayList<Displayable>();
-    private ArrayList<Room> room_list = new ArrayList<Room>();
-    private Char[][] objectGrid = null;
+    public ArrayList<Displayable> dis_object = new ArrayList<Displayable>();
+    public ArrayList<Room> room_list = new ArrayList<Room>();
+    public Char[][] objectGrid = null;
     //private Stack<Displayable>[][] objectGrid = null; // note change in this line
 
 
@@ -50,7 +50,7 @@ public class ObjectDisplayGrid extends JFrame implements KeyListener, InputSubje
         {
             System.out.println(CLASSID + ".registerInputObserver " + observer.toString());
         }
-        //inputObservers.add(observer);
+        inputObservers.add(observer);
     }
 
     @Override

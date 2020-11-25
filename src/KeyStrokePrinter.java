@@ -16,7 +16,7 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
     @Override
     public void observerUpdate(char ch) {
         if (DEBUG > 0) {
-            System.out.println(CLASSID + ".observerUpdate receiving character " + ch);
+            // System.out.println(CLASSID + ".observerUpdate receiving character " + ch);
         }
         inputQueue.add(ch);
     }
@@ -28,6 +28,27 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+    public void move(int dx, int dy)
+    {
+        int length = (displayGrid.dis_object).size();
+        int newX;
+        int newY;
+        for(int i = 0; i < length; i++)
+        {
+            if(displayGrid.dis_object.get(i) instanceof Player)
+            {
+                newX = displayGrid.dis_object.get(i).PosX + dx;
+                displayGrid.dis_object.get(i).setPosX(newX);
+                newY = displayGrid.dis_object.get(i).PosY + dy;
+                displayGrid.dis_object.get(i).setPosY(newY);
+                break;
+            }
+        }
+        
+        displayGrid.initializeDisplay();
+        
+        // return(PosX);
     }
 
     private boolean processInput() {
@@ -46,8 +67,24 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
                 if (ch == 'X') {
                     System.out.println("got an X, ending input checking");
                     return false;
-                } else {
-                    System.out.println("character " + ch + " entered on the keyboard");
+                } 
+                else if(ch == 'h'){
+                    move(-1,0);
+                    
+                }
+                else if(ch == 'l'){
+                    move(1,0);
+                }
+                else if(ch == 'k'){
+                    move(0,1);
+                }
+                else if(ch == 'j'){
+                    move(0,-1);
+                }
+                    
+                    
+                else {
+                    // System.out.println("character " + ch + " entered on the keyboard");
                 }
             }
         }
