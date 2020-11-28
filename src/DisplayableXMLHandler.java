@@ -338,6 +338,7 @@ public class DisplayableXMLHandler extends DefaultHandler {
         {
             System.out.println("Unknown qname: " + qName);
         }
+        // displayableBeingParsed.visible = true;
         data = new StringBuilder();
     }
 

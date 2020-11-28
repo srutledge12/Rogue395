@@ -11,6 +11,7 @@ class Displayable {
     public int intValue;
     public int width;
     public int height;
+    public boolean visible = true;
 
 
     
@@ -21,10 +22,12 @@ class Displayable {
 
     void setInvisible(){
         System.out.println("setInvisible");
+        visible = false;
     }
     
     public void setVisible(){
         System.out.println("setVisible");
+        visible = true;
     }
 
     public void setMaxHit(int maxHit){

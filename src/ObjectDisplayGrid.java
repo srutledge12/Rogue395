@@ -23,6 +23,8 @@ public class ObjectDisplayGrid extends JFrame implements KeyListener, InputSubje
     public List<Integer> usedY = new ArrayList<Integer>();
     public static int startx = -1;
     public static int starty = -1;
+    // public ArrayList<Displayable> items = new ArrayList<Displayable>();
+    // public ArrayList<Displayable> inventory = new ArrayList<Displayable>();
     //private Stack<Displayable>[][] objectGrid = null; // note change in this line
 
 
@@ -141,6 +143,9 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         Char ch = new Char('.');
         for (int i = 0; i < dis_object.size(); i++)
         {
+            // if(dis_object.get(i).visible){
+            //     System.out.println("visible");
+            // }
             if(dis_object.get(i) instanceof Room)
             {
                 for (int x = (dis_object.get(i)).PosX; x < (dis_object.get(i)).width + (dis_object.get(i)).PosX; x++)
@@ -275,8 +280,8 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                 // for(int k = 0; k < usedX.size()-1; k++)
                 // {
                 //     if(dis_object.get(i).PosX + startx == usedX.get(k) && dis_object.get(i).PosY + starty == usedY.get(k)){
-                        playerX = dis_object.get(i).PosX + startx;
-                        playerY = dis_object.get(i).PosY + starty;
+                playerX = dis_object.get(i).PosX + startx;
+                playerY = dis_object.get(i).PosY + starty;
                 //         break;
                 //     }
                     
@@ -286,28 +291,23 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
             else if(dis_object.get(i) instanceof Sword)
             {
                 ch = new Char(')');
-                /*for (int z = 0; z < room_list.size(); z++)
-                {
-                    if(room_list.get(z) instanceof Room)
-                    {
-                        if(((Sword)dis_object.get(i)).room == room_list.get(z).room)
-                        {
-                            startx = room_list.get(z).PosX;
-                            starty = room_list.get(z).PosY;
-                            break;
-                        }
-                    }
-                }*/
+                // for(int i = 0; i < .inventory.size(); i++)
+                // {
+                   
+                //     System.out.println(inventory.get(i));
+                // }
                 addObjectToDisplay(ch, dis_object.get(i).PosX + startx, dis_object.get(i).PosY + starty);
             }
             else if(dis_object.get(i) instanceof Scroll)
             {
                 ch = new Char('?');
+                // items.add(dis_object.get(i));
                 addObjectToDisplay(ch, dis_object.get(i).PosX, dis_object.get(i).PosY);
             }
             else if(dis_object.get(i) instanceof Armor)
             {
                 ch = new Char(']');
+                // items.add(dis_object.get(i));
                 addObjectToDisplay(ch, dis_object.get(i).PosX, dis_object.get(i).PosY);
             }
             
@@ -356,6 +356,31 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                 writeToTerminal(x, y);
             }
         }
+    }
+
+    public void printInventory(ArrayList<Displayable> inventory)
+    {
+        terminal.clear();
+        initializeDisplay();
+        terminal.write("Inventory:", 10, 30);
+        for(int i = 0; i < inventory.size(); i++)
+        {
+            System.out.println(inventory.get(i));
+            if(inventory.get(i) instanceof Scroll)
+            {
+                terminal.write("?", 20 + i, 30);
+            }
+            else if(inventory.get(i) instanceof Armor)
+            {
+                terminal.write("]", 20 + i, 30);
+            }
+            else if(inventory.get(i) instanceof Sword)
+            {
+                terminal.write(")", 20 + i, 30);
+            }
+        }
+        
+        terminal.repaint();
     }
 
     private void writeToTerminal(int x, int y) {
