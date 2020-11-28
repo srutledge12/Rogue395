@@ -17,6 +17,12 @@ public class ObjectDisplayGrid extends JFrame implements KeyListener, InputSubje
     public ArrayList<Displayable> dis_object = new ArrayList<Displayable>();
     public ArrayList<Room> room_list = new ArrayList<Room>();
     public Char[][] objectGrid = null;
+    public static int playerX;
+    public static int playerY;
+    public List<Integer> usedX = new ArrayList<Integer>();
+    public List<Integer> usedY = new ArrayList<Integer>();
+    public static int startx = -1;
+    public static int starty = -1;
     //private Stack<Displayable>[][] objectGrid = null; // note change in this line
 
 
@@ -131,8 +137,7 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
 
     public final void initializeDisplay()
     {
-        int startx = -1;
-        int starty = -1;
+        
         Char ch = new Char('.');
         for (int i = 0; i < dis_object.size(); i++)
         {
@@ -148,7 +153,11 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                             addObjectToDisplay(ch, x, y);
                             ch = new Char('.');
                         }
-                        else{addObjectToDisplay(ch, x, y);}
+                        else{addObjectToDisplay(ch, x, y);
+                        usedX.add(x);
+                        usedY.add(y);
+                        }
+
                     }
                 }
             }
@@ -176,12 +185,16 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                                 {
                                     ch = new Char('+');
                                     addObjectToDisplay(ch, x, y);
+                                    usedX.add(x);
+                                    usedY.add(y);
                                     ch = new Char('#');
                                 }
 
                                 else
                                 {
                                     addObjectToDisplay(ch, x, y);
+                                    usedX.add(x);
+                                    usedY.add(y);
                                     ch = new Char('#');
                                 }
 
@@ -198,12 +211,16 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                                     {
                                         ch = new Char('+');
                                         addObjectToDisplay(ch, x, y);
+                                        usedX.add(x);
+                                        usedY.add(y);
                                         ch = new Char('#');
                                     }
 
                                     else
                                     {
                                         addObjectToDisplay(ch, x, y);
+                                        usedX.add(x);
+                                        usedY.add(y);
                                         ch = new Char('#');
                                     }
 
@@ -246,13 +263,25 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                         if(((Player)dis_object.get(i)).room == room_list.get(z).room)
                         {
                             startx = room_list.get(z).PosX;
+                            // playerX = startx;
                             starty = room_list.get(z).PosY;
+                            // playerY = starty;
                             break;
                         }
                     }
                 }
                 ch = new Char('@');
-                addObjectToDisplay(ch, dis_object.get(i).PosX + startx, dis_object.get(i).PosY + starty);
+                // addObjectToDisplay(ch, dis_object.get(i).PosX + startx, dis_object.get(i).PosY + starty);
+                // for(int k = 0; k < usedX.size()-1; k++)
+                // {
+                //     if(dis_object.get(i).PosX + startx == usedX.get(k) && dis_object.get(i).PosY + starty == usedY.get(k)){
+                        playerX = dis_object.get(i).PosX + startx;
+                        playerY = dis_object.get(i).PosY + starty;
+                //         break;
+                //     }
+                    
+                // }
+                
             }
             else if(dis_object.get(i) instanceof Sword)
             {
@@ -281,8 +310,21 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                 ch = new Char(']');
                 addObjectToDisplay(ch, dis_object.get(i).PosX, dis_object.get(i).PosY);
             }
-            terminal.repaint();
+            
         }
+        // for(int i = 0; i < usedX.size()-1; i++)
+        // {
+        //     if(playerX == usedX.get(i) && playerY == usedY.get(i)){
+                ch = new Char('@');
+                addPlayer(ch, playerX, playerY);
+                
+            //     break;
+            // }
+            
+            
+        // }
+        terminal.repaint();
+            
 
     }
 
@@ -295,6 +337,17 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
     }
 
     public void addObjectToDisplay(Char ch, int x, int y)
+    {
+        if ((0 <= x) && (x < objectGrid.length))
+        {
+            if ((0 <= y) && (y < objectGrid[0].length)) {
+                objectGrid[x][y] = ch;
+                writeToTerminal(x, y);
+            }
+        }
+    }
+
+    public void addPlayer(Char ch, int x, int y)
     {
         if ((0 <= x) && (x < objectGrid.length))
         {

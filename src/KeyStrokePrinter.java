@@ -38,10 +38,21 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
         {
             if(displayGrid.dis_object.get(i) instanceof Player)
             {
-                newX = displayGrid.dis_object.get(i).PosX + dx;
-                displayGrid.dis_object.get(i).setPosX(newX);
-                newY = displayGrid.dis_object.get(i).PosY + dy;
-                displayGrid.dis_object.get(i).setPosY(newY);
+                for(int k = 0; k < displayGrid.usedX.size()-1; k++)
+                {
+                    if(displayGrid.dis_object.get(i).PosX + dx + displayGrid.startx == displayGrid.usedX.get(k) && displayGrid.dis_object.get(i).PosY + dy + displayGrid.starty == displayGrid.usedY.get(k)){
+                        newX = displayGrid.dis_object.get(i).PosX + dx;
+                        displayGrid.dis_object.get(i).setPosX(newX);
+                        newY = displayGrid.dis_object.get(i).PosY + dy;
+                        displayGrid.dis_object.get(i).setPosY(newY);
+                        break;
+                    }
+                    
+                }
+                // newX = displayGrid.dis_object.get(i).PosX + dx;
+                // displayGrid.dis_object.get(i).setPosX(newX);
+                // newY = displayGrid.dis_object.get(i).PosY + dy;
+                // displayGrid.dis_object.get(i).setPosY(newY);
                 break;
             }
         }
