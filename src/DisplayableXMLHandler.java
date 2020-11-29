@@ -168,14 +168,14 @@ public class DisplayableXMLHandler extends DefaultHandler {
             dis_object.add(displayableBeingParsed);
             bPassage = true;
         }
-        else if (qName.equalsIgnoreCase("ItemAction"))
-        {
-            String name = attributes.getValue("name");
-            actionBeingParsed = new ItemAction( (Item) displayableBeingParsed);
-            dis_object.add(displayableBeingParsed);
-            ((Item) displayableBeingParsed).setAction((ItemAction) actionBeingParsed);
-            bItem = true;
-        }
+        // else if (qName.equalsIgnoreCase("ItemAction"))
+        // {
+        //     String name = attributes.getValue("name");
+        //     actionBeingParsed = new ItemAction( (Item) displayableBeingParsed);
+        //     dis_object.add(displayableBeingParsed);
+        //     ((Item) displayableBeingParsed).setAction((ItemAction) actionBeingParsed);
+        //     bItem = true;
+        // }
 
         else if (qName.equalsIgnoreCase("Armor"))
         {
@@ -229,7 +229,7 @@ public class DisplayableXMLHandler extends DefaultHandler {
             scroll1.setID(Integer.parseInt(room.toString()), Integer.parseInt(serial.toString()));
             displayableBeingParsed = (Scroll) scroll1;
             dis_object.add(displayableBeingParsed);
-            bArmor = true;
+            bSword = true;
 
         }
 // else if (qName.equalsIgnoreCase("Scroll"))

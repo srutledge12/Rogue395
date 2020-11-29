@@ -3,6 +3,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.List;
 import java.util.ArrayList;
 import asciiPanel.AsciiPanel;
+import java.util.Random;
 public class KeyStrokePrinter implements InputObserver, Runnable {
 
     private static int DEBUG = 1;
@@ -15,6 +16,7 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
     public ArrayList<Displayable> inventory = new ArrayList<Displayable>();
     public ArrayList<Displayable> onPlayer = new ArrayList<Displayable>();
     private static AsciiPanel terminal;
+    public Random ran = new Random();
     
 
     public KeyStrokePrinter(ObjectDisplayGrid grid) {
@@ -42,9 +44,19 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
     public void move(int dx, int dy)
     {
         int length = (displayGrid.dis_object).size();
-        
-        for(int i = 0; i < length; i++)
+        int scroll = 0;
+        for(int i = 0; i < length - 1; i++)
         {
+            // System.out.println(displayGrid.dis_object.get(i));
+            if(scroll == 1 && displayGrid.dis_object.get(i) instanceof Scroll){
+                displayGrid.dis_object.remove(displayGrid.dis_object.get(i));
+                // items.remove(displayGrid.dis_object.get(i));
+            }
+            if(displayGrid.dis_object.get(i) instanceof Scroll)
+            {
+                scroll = 1;
+            }
+
             if(displayGrid.dis_object.get(i) instanceof Player)
             {
                 for(int k = 0; k < displayGrid.usedX.size()-1; k++)
@@ -64,10 +76,10 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
             }
             //If instance of Room
         }
-        if(onPlayer.size() == 0)
-        {
-            displayGrid.noArmor();
-        }
+        // if(onPlayer.size() == 0)
+        // {
+        //     displayGrid.noArmor();
+        // }
         // terminal.clear();
         displayGrid.initializeDisplay();
         
@@ -83,10 +95,23 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
         {
             if(displayGrid.dis_object.get(i) instanceof Scroll || displayGrid.dis_object.get(i) instanceof Armor || displayGrid.dis_object.get(i) instanceof Sword)
             {
+                // System.out.println("Scroll");
                 System.out.println(displayGrid.dis_object.get(i));
                 items.add(displayGrid.dis_object.get(i));
             }
         }
+        // int scroll = 0;
+        // for(int i = 0; i < items.size(); i++)
+        // {
+        //     if(scroll == 1 && displayGrid.dis_object.get(i) instanceof Scroll){
+        //         displayGrid.dis_object.remove(displayGrid.dis_object.get(i));
+        //         items.remove(displayGrid.dis_object.get(i));
+        //     }
+        //     if(displayGrid.dis_object.get(i) instanceof Scroll)
+        //     {
+        //         scroll = 1;
+        //     }
+        // }
 
         int l1 = (items).size();
         
@@ -133,6 +158,25 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
             {
                 // Player a1 = (Player)displayGrid.dis_object.get(i);
                 Player.setArmor(armor);
+            }
+            //If instance of Room
+        }
+        // terminal.clear();
+        
+        
+        // return(PosX);
+    }
+
+    public void weild(Sword sword)
+    {
+        int length = (displayGrid.dis_object).size();
+        
+        for(int i = 0; i < length; i++)
+        {
+            if(displayGrid.dis_object.get(i) instanceof Player)
+            {
+                // Player a1 = (Player)displayGrid.dis_object.get(i);
+                Player.setSword(sword);
             }
             //If instance of Room
         }
@@ -263,6 +307,35 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
                         onPlayer.remove(onPlayer.get(0));
                     }
                 }
+
+                else if(ch == 'T')
+                {
+                    ind = 11;
+                    while(inputQueue.peek() == null){}
+                    
+                    ch = inputQueue.poll();
+                    if(Character.isDigit(ch))
+                    {
+                        ind = Integer.parseInt(String.valueOf(ch));
+                    }
+                    
+                    // System.out.println(ind);
+                    if(ind <= inventory.size())
+                    {
+                        System.out.println(ind);
+                        if(inventory.get(ind-1) instanceof Sword)
+                        {
+                            weild((Sword)inventory.get(ind-1));
+                            displayGrid.weilded((Sword)inventory.get(ind-1));
+                            // onPlayer.add(inventory.get(ind-1));
+                            // inventory.remove(inventory.get(ind-1));
+                        }
+                        else{
+                            displayGrid.notSword();
+                        }
+                    }
+                }
+
                 else if(ch == 'x')
                 {
                     displayGrid.hallucinate();
@@ -270,6 +343,48 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
                     Char ch2 = new Char('@');
                     displayGrid.addPlayer(ch2, newX, newY);
                 } 
+                else if(ch == 'a')
+                {
+                    int length = (displayGrid.dis_object).size();
+                    
+                    for(int i = 0; i < length - 1; i++)
+                    {
+                        if(displayGrid.dis_object.get(i) instanceof Monster)
+                        {
+                            displayGrid.teleport(displayGrid.dis_object.get(i));
+                            break;
+                        }
+                    }
+        
+                }
+
+                else if(ch == 'r')
+                {
+                    ind = 11;
+                    while(inputQueue.peek() == null){}
+                    
+                    ch = inputQueue.poll();
+                    if(Character.isDigit(ch))
+                    {
+                        ind = Integer.parseInt(String.valueOf(ch));
+                    }
+                    
+                    // System.out.println(ind);
+                    if(ind <= inventory.size())
+                    {
+                        System.out.println(ind);
+                        if(inventory.get(ind-1) instanceof Scroll)
+                        {
+                            displayGrid.read((Scroll)inventory.get(ind-1));
+                            // displayGrid.weilded((Sword)inventory.get(ind-1));
+                            // onPlayer.add(inventory.get(ind-1));
+                            // inventory.remove(inventory.get(ind-1));
+                        }
+                        else{
+                            displayGrid.notScroll();
+                        }
+                    }
+                }
                     
                 else {
                     // System.out.println("character " + ch + " entered on the keyboard");
@@ -281,7 +396,7 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
         }
         return true;
     }
-
+    
     @Override
     public void run() {
         displayGrid.registerInputObserver(this);

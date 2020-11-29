@@ -1,7 +1,7 @@
 // package src;
 
 public class Player extends Creature{
-    private Item sword;
+    private static Item sword;
     private static Item armor;
     private String DeathAction;
     private String HitAction;
@@ -9,8 +9,8 @@ public class Player extends Creature{
     public int room;
     private int serial;
 
-    public void setSword(Item _sword) {
-        this.sword = _sword;
+    public static void setSword(Item _sword) {
+        sword = _sword;
     }
     public static void setArmor(Item _armor) {
         armor = _armor;

@@ -370,21 +370,21 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
     {
         terminal.clear();
         initializeDisplay();
-        terminal.write("Inventory:", 10, 30);
+        terminal.write("Inventory Pack:", 10, 30);
         for(int i = 0; i < inventory.size(); i++)
         {
-            // System.out.println(inventory.get(i));
+            terminal.write(Integer.toString(i + 1), 26 + i, 29);
             if(inventory.get(i) instanceof Scroll)
             {
-                terminal.write("?", 20 + i, 30);
+                terminal.write("?", 26 + i, 30);
             }
             else if(inventory.get(i) instanceof Armor)
             {
-                terminal.write("]", 20 + i, 30);
+                terminal.write("]", 26 + i, 30);
             }
             else if(inventory.get(i) instanceof Sword)
             {
-                terminal.write(")", 20 + i, 30);
+                terminal.write(")", 26 + i, 30);
             }
         }
         
@@ -409,7 +409,7 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
     }
 
     public void noArmor(){
-        terminal.clear();
+        // terminal.clear();
         initializeDisplay();
         terminal.write("No Armor On", 50, 10);
         terminal.repaint();
@@ -421,6 +421,27 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         terminal.write("Armor On", 50, 10);
         terminal.repaint();
     }
+    public void weilded(Sword sword)
+    {
+        terminal.clear();
+        initializeDisplay();
+        terminal.write("Sword Weilded", 50, 15);
+        terminal.repaint();
+    }
+    public void notSword()
+    {
+        terminal.clear();
+        initializeDisplay();
+        terminal.write("Not a sword", 50, 15);
+        terminal.repaint();
+    }
+    public void notScroll()
+    {
+        terminal.clear();
+        initializeDisplay();
+        terminal.write("Not a scroll", 50, 15);
+        terminal.repaint();
+    }
     public void armorOff()
     {
         terminal.clear();
@@ -428,18 +449,39 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         terminal.write("Armor Off", 50, 10);
         terminal.repaint();
     }
+    public void teleport(Displayable dis)
+    {
+        Random r = new Random();
+        terminal.write("A creature has teleported somewhere else in the dungeon!", 10, 25);
+        int ran = r.nextInt(usedX.size()-1);
+        // terminal.write("T", usedX.get(ran), usedY.get(ran));
+        dis.PosX = usedX.get(ran);
+        dis.PosY = usedY.get(ran);
+        // terminal.repaint();
+        Char ch = new Char('T');
+        addObjectToDisplay(ch, usedX.get(ran), usedY.get(ran));
+    }
 
     public void hallucinate()
     {
         terminal.clear();
         initializeDisplay();
+        // terminal.write("Read Scroll: " + "You have picked up a scroll of hallucination!", 10, 25);
         for(int i = 0; i < usedX.size(); i++)
         {
             Random r = new Random();
             char c = (char)(r.nextInt(26) + 'a');
             terminal.write(c, usedX.get(i), usedY.get(i));
-        }
-        
+        } 
+        terminal.repaint();
+    }
+
+    public void read(Scroll scroll)
+    {
+        // terminal.clear();
+        initializeDisplay();
+        terminal.write("Read Scroll: " + "You have picked up a scroll of hallucination!", 10, 25);
+        terminal.repaint();
     }
 
     private void writeToTerminal(int x, int y) {

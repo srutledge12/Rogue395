@@ -2,9 +2,9 @@
 
 public class Scroll extends Item
 {
-    private String name;
-    private int room;
-    private int serial;
+    public String name;
+    public int room;
+    public int serial;
 
     public Scroll() {
         // name = _name;
