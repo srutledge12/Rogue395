@@ -101,14 +101,14 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
         
     }
 
-    public void drop()
+    public void drop(int ind)
     {
-        if(inventory.size() > 0)
+        if(inventory.size() >= ind)
         {
-            inventory.get(inventory.size() - 1).PosX = newX;
-            inventory.get(inventory.size() - 1).PosY = newY;
-            displayGrid.dis_object.add(inventory.get(inventory.size() - 1));
-            inventory.remove(inventory.size() - 1);
+            inventory.get(ind - 1).PosX = newX;
+            inventory.get(ind - 1).PosY = newY;
+            displayGrid.dis_object.add(inventory.get(ind - 1));
+            inventory.remove(ind - 1);
             
         }
         displayGrid.printInventory(inventory);
@@ -120,6 +120,8 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
     private boolean processInput() {
 
         char ch;
+        char prev;
+        int ind;
 
         boolean processing = true;
         while (processing) {
@@ -151,17 +153,61 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
                     pickUp();
                 }
                 else if(ch == 'd'){
-                    drop();
+                    ind = 11;
+                    while(inputQueue.peek() == null){}
+                    
+                    ch = inputQueue.poll();
+                    if(Character.isDigit(ch))
+                    {
+                        ind = Integer.parseInt(String.valueOf(ch));
+                    }
+                    
+                    // System.out.println(ind);
+                    if(ind <= inventory.size())
+                    {
+                        System.out.println(ind);
+                        drop(ind);
+                    }
+                    
                 }
                 else if(ch == 'i'){
                     inventory();
+                }
+                else if(ch == '?')
+                {
+                    displayGrid.help();
+                }
+                else if((ch == 'y' || ch == 'Y'))
+                {
+                    // displayGrid.endGame();
+                    // System.out.println("Game Over");
+                    // return(false);
+                }
+                else if(ch == 'E')
+                {
+                    // if(inputQueue.peek() == 'y' || inputQueue.peek() == 'Y')
+                    // {
+                    displayGrid.checkEnd();
+                    while(inputQueue.peek() == null){}
+                    ch = inputQueue.peek();
+                    if(ch == 'y' || ch == 'Y')
+                    {
+                        displayGrid.endGame();
+                        System.out.println("Game Over");
+                        return(false);
+                    }
+                    // System.out.println(prev);
+                    // }
                 }
                     
                     
                 else {
                     // System.out.println("character " + ch + " entered on the keyboard");
                 }
+
+                
             }
+            
         }
         return true;
     }

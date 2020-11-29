@@ -139,7 +139,7 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
 
     public final void initializeDisplay()
     {
-        
+        // terminal.clear();
         Char ch = new Char('.');
         for (int i = 0; i < dis_object.size(); i++)
         {
@@ -358,6 +358,7 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         }
     }
 
+    //Steven Change
     public void printInventory(ArrayList<Displayable> inventory)
     {
         terminal.clear();
@@ -365,7 +366,7 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         terminal.write("Inventory:", 10, 30);
         for(int i = 0; i < inventory.size(); i++)
         {
-            System.out.println(inventory.get(i));
+            // System.out.println(inventory.get(i));
             if(inventory.get(i) instanceof Scroll)
             {
                 terminal.write("?", 20 + i, 30);
@@ -382,11 +383,29 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         
         terminal.repaint();
     }
+    public void help(){
+        terminal.write("h,l,k,j,i,?,H,c,d,p,R,T,w,E,0-9. H <cmd> for more info", 10, 25);
+        terminal.repaint();
+    }
+
+    public void endGame(){
+        terminal.clear();
+        terminal.write("Game Over", 35, 20);
+        terminal.repaint();
+    }
+
+    public void checkEnd(){
+        terminal.clear();
+        terminal.write("End Game? Y/N", 35, 20);
+        terminal.repaint();
+        // terminal.clear();
+    }
 
     private void writeToTerminal(int x, int y) {
         char ch = objectGrid[x][y].getChar();
         terminal.write(ch, x, y);
         terminal.repaint();
+        // terminal.clear();
     }
 /*
     public void update_stats(Monster monster, Player player, CreatureAction action)
