@@ -13,6 +13,7 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
     public int newY;
     public ArrayList<Displayable> items = new ArrayList<Displayable>();
     public ArrayList<Displayable> inventory = new ArrayList<Displayable>();
+    public ArrayList<Displayable> onPlayer = new ArrayList<Displayable>();
     private static AsciiPanel terminal;
     
 
@@ -53,6 +54,7 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
                         displayGrid.dis_object.get(i).setPosX(newX);
                         newY = displayGrid.dis_object.get(i).PosY + dy;
                         displayGrid.dis_object.get(i).setPosY(newY);
+                        
                         break;
                     }
                     
@@ -61,6 +63,10 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
                 break;
             }
             //If instance of Room
+        }
+        if(onPlayer.size() == 0)
+        {
+            displayGrid.noArmor();
         }
         // terminal.clear();
         displayGrid.initializeDisplay();
@@ -115,6 +121,25 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
         }
         displayGrid.printInventory(inventory);
         
+    }
+
+    public void wear(Armor armor)
+    {
+        int length = (displayGrid.dis_object).size();
+        
+        for(int i = 0; i < length; i++)
+        {
+            if(displayGrid.dis_object.get(i) instanceof Player)
+            {
+                // Player a1 = (Player)displayGrid.dis_object.get(i);
+                Player.setArmor(armor);
+            }
+            //If instance of Room
+        }
+        // terminal.clear();
+        
+        
+        // return(PosX);
     }
 
     // public void compare(int pX, int)
@@ -201,7 +226,50 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
                     // System.out.println(prev);
                     // }
                 }
+                else if(ch == 'w')
+                {
+                    ind = 11;
+                    while(inputQueue.peek() == null){}
                     
+                    ch = inputQueue.poll();
+                    if(Character.isDigit(ch))
+                    {
+                        ind = Integer.parseInt(String.valueOf(ch));
+                    }
+                    
+                    // System.out.println(ind);
+                    if(ind <= inventory.size())
+                    {
+                        System.out.println(ind);
+                        if(inventory.get(ind-1) instanceof Armor)
+                        {
+                            wear((Armor)inventory.get(ind-1));
+                            displayGrid.worn((Armor)inventory.get(ind-1));
+                            onPlayer.add(inventory.get(ind-1));
+                            inventory.remove(inventory.get(ind-1));
+                        }
+                        else{
+                            displayGrid.noArmor();
+                        }
+                    }
+                }
+
+                else if(ch == 'c')
+                {
+                    displayGrid.armorOff();
+                    if(onPlayer.size() > 0)
+                    {
+                        inventory.add(onPlayer.get(0));
+                        onPlayer.remove(onPlayer.get(0));
+                    }
+                }
+                else if(ch == 'x')
+                {
+                    displayGrid.hallucinate();
+                    // Char ch2 = new '@';
+                    Char ch2 = new Char('@');
+                    displayGrid.addPlayer(ch2, newX, newY);
+                } 
                     
                 else {
                     // System.out.println("character " + ch + " entered on the keyboard");

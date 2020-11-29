@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.Random;
 
 public class ObjectDisplayGrid extends JFrame implements KeyListener, InputSubject
 {
@@ -23,6 +24,7 @@ public class ObjectDisplayGrid extends JFrame implements KeyListener, InputSubje
     public List<Integer> usedY = new ArrayList<Integer>();
     public static int startx = -1;
     public static int starty = -1;
+    public boolean hall = false;
     // public ArrayList<Displayable> items = new ArrayList<Displayable>();
     // public ArrayList<Displayable> inventory = new ArrayList<Displayable>();
     //private Stack<Displayable>[][] objectGrid = null; // note change in this line
@@ -323,6 +325,10 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
             
             
         // }
+        // if(hall)
+        // {
+        //     hallucinate();
+        // }
         terminal.repaint();
             
 
@@ -357,6 +363,7 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
             }
         }
     }
+
 
     //Steven Change
     public void printInventory(ArrayList<Displayable> inventory)
@@ -399,6 +406,40 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         terminal.write("End Game? Y/N", 35, 20);
         terminal.repaint();
         // terminal.clear();
+    }
+
+    public void noArmor(){
+        terminal.clear();
+        initializeDisplay();
+        terminal.write("No Armor On", 50, 10);
+        terminal.repaint();
+    }
+    public void worn(Armor armor)
+    {
+        terminal.clear();
+        initializeDisplay();
+        terminal.write("Armor On", 50, 10);
+        terminal.repaint();
+    }
+    public void armorOff()
+    {
+        terminal.clear();
+        initializeDisplay();
+        terminal.write("Armor Off", 50, 10);
+        terminal.repaint();
+    }
+
+    public void hallucinate()
+    {
+        terminal.clear();
+        initializeDisplay();
+        for(int i = 0; i < usedX.size(); i++)
+        {
+            Random r = new Random();
+            char c = (char)(r.nextInt(26) + 'a');
+            terminal.write(c, usedX.get(i), usedY.get(i));
+        }
+        
     }
 
     private void writeToTerminal(int x, int y) {
