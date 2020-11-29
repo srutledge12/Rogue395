@@ -19,6 +19,7 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
     public KeyStrokePrinter(ObjectDisplayGrid grid) {
         inputQueue = new ConcurrentLinkedQueue<>();
         displayGrid = grid;
+        pickUp();
     }
 
     @Override
@@ -76,6 +77,7 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
         {
             if(displayGrid.dis_object.get(i) instanceof Scroll || displayGrid.dis_object.get(i) instanceof Armor || displayGrid.dis_object.get(i) instanceof Sword)
             {
+                System.out.println(displayGrid.dis_object.get(i));
                 items.add(displayGrid.dis_object.get(i));
             }
         }
