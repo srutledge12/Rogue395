@@ -2,7 +2,7 @@
 
 public class Action{
     private char c;
-    private String msg;
+    public String msg;
     private int v;
     public CreatureAction[ ] creatureactions;
     public ItemAction[ ] itemactions;

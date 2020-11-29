@@ -1,7 +1,7 @@
 // package src;
 
 public class Monster extends Creature{
-    private String name;
+    public String name;
     public int room;
     public int serial;
     public int s_x;

@@ -1,8 +1,8 @@
 // package src;
 
 public class Player extends Creature{
-    private static Item sword;
-    private static Item armor;
+    public static Item sword = null;
+    public static Item armor = null;
     private String DeathAction;
     private String HitAction;
     private String name;

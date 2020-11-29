@@ -56,7 +56,6 @@ public class DisplayableXMLHandler extends DefaultHandler {
     private Action actionBeingParsed = null;
 
 
-
     // The bX fields here indicate that at corresponding field is
 // having a value defined in the XML file. In particular, a
 // line in the xml file might be:
@@ -92,21 +91,24 @@ public class DisplayableXMLHandler extends DefaultHandler {
     private boolean bSword = false;
 
 
-
     // Used by code outside the class to get the list of Student objects
 // that have been constructed.
     public ArrayList<Displayable> getDis_objects() {
         return dis_object;
     }
+
     public ArrayList<Room> getRooms() {
         return roomList;
     }
+
     public ArrayList<Passage> getPassages() {
         return passageList;
     }
+
     public ArrayList<Creature> getCreatures() {
         return creatureList;
     }
+
     public ArrayList<Item> getItems() {
         return itemList;
     }
@@ -131,8 +133,7 @@ public class DisplayableXMLHandler extends DefaultHandler {
         if (DEBUG > 1) {
             System.out.println(CLASSID + ".startElement qName: " + qName);
         }
-        if (qName.equalsIgnoreCase("Dungeon"))
-        {
+        if (qName.equalsIgnoreCase("Dungeon")) {
 
             String name = attributes.getValue("name");
 // String type = attributes.getValue("type");
@@ -140,11 +141,9 @@ public class DisplayableXMLHandler extends DefaultHandler {
             int gameheight = Integer.parseInt(attributes.getValue("gameHeight"));
             int topHeight = Integer.parseInt(attributes.getValue("topHeight"));
             int bottomHeight = Integer.parseInt(attributes.getValue("bottomHeight"));
-            dungeonBeingParsed = new Dungeon(name,width,gameheight, topHeight, bottomHeight);
+            dungeonBeingParsed = new Dungeon(name, width, gameheight, topHeight, bottomHeight);
             dis_object.add(displayableBeingParsed);
-        }
-        else if (qName.equalsIgnoreCase("Room"))
-        {
+        } else if (qName.equalsIgnoreCase("Room")) {
             String name = attributes.getValue("room");
 // String type = attributes.getValue("type");
             Room room1 = new Room(name);
@@ -155,9 +154,7 @@ public class DisplayableXMLHandler extends DefaultHandler {
             dis_object.add(displayableBeingParsed);
 // roomList.add(displayableBeingParsed);
             bRoom = true;
-        }
-        else if (qName.equalsIgnoreCase("Passage"))
-        {
+        } else if (qName.equalsIgnoreCase("Passage")) {
             String room1 = attributes.getValue("room1");
             String room2 = attributes.getValue("room2");
             Passage passage1 = new Passage();
@@ -167,18 +164,13 @@ public class DisplayableXMLHandler extends DefaultHandler {
             displayableBeingParsed = (Passage) passage1;
             dis_object.add(displayableBeingParsed);
             bPassage = true;
-        }
-        // else if (qName.equalsIgnoreCase("ItemAction"))
-        // {
-        //     String name = attributes.getValue("name");
-        //     actionBeingParsed = new ItemAction( (Item) displayableBeingParsed);
-        //     dis_object.add(displayableBeingParsed);
-        //     ((Item) displayableBeingParsed).setAction((ItemAction) actionBeingParsed);
-        //     bItem = true;
-        // }
-
-        else if (qName.equalsIgnoreCase("Armor"))
-        {
+        } else if (qName.equalsIgnoreCase("ItemAction")) {
+            String name = attributes.getValue("name");
+            actionBeingParsed = new ItemAction((Item) displayableBeingParsed);
+            dis_object.add(displayableBeingParsed);
+            ((Item) displayableBeingParsed).setAction((ItemAction) actionBeingParsed);
+            bItem = true;
+        } else if (qName.equalsIgnoreCase("Armor")) {
             String name = attributes.getValue("name");
             String room = attributes.getValue("room");
             String serial = attributes.getValue("serial");
@@ -190,20 +182,22 @@ public class DisplayableXMLHandler extends DefaultHandler {
             dis_object.add(displayableBeingParsed);
             bArmor = true;
 // bItem = true;
-        }
-        else if (qName.equalsIgnoreCase("CreatureAction"))
-        {
+        } else if (qName.equalsIgnoreCase("CreatureAction")) {
             String name = attributes.getValue("name");
-            if(displayableBeingParsed != null)
-            {
-                actionBeingParsed = new CreatureAction( (Creature) displayableBeingParsed);
+            String type = attributes.getValue("type");
+            if (displayableBeingParsed != null) {
+                actionBeingParsed = new CreatureAction((Creature) displayableBeingParsed);
+                ((CreatureAction)actionBeingParsed).name(name);
                 dis_object.add(displayableBeingParsed);
-                ((Creature) displayableBeingParsed).setAction((CreatureAction) actionBeingParsed);
+                if (type == "hit") {
+                    ((Creature) displayableBeingParsed).setHitAction((CreatureAction) actionBeingParsed);
+                } else {
+                    ((Creature) displayableBeingParsed).setDeathAction((CreatureAction) actionBeingParsed);
+                }
+
             }
             bCreature = true;
-        }
-        else if (qName.equalsIgnoreCase("Sword"))
-        {
+        } else if (qName.equalsIgnoreCase("Sword")) {
 
             String name = attributes.getValue("name");
             String room = attributes.getValue("room");
@@ -216,9 +210,7 @@ public class DisplayableXMLHandler extends DefaultHandler {
             dis_object.add(displayableBeingParsed);
             bSword = true;
 
-        }
-        else if (qName.equalsIgnoreCase("Scroll"))
-        {
+        } else if (qName.equalsIgnoreCase("Scroll")) {
 
             String name = attributes.getValue("name");
             String room = attributes.getValue("room");
@@ -229,37 +221,16 @@ public class DisplayableXMLHandler extends DefaultHandler {
             scroll1.setID(Integer.parseInt(room.toString()), Integer.parseInt(serial.toString()));
             displayableBeingParsed = (Scroll) scroll1;
             dis_object.add(displayableBeingParsed);
-            bSword = true;
+            bArmor = true;
 
-        }
-// else if (qName.equalsIgnoreCase("Scroll"))
-// {
-// String type = attributes.getValue("name");
-// Item item = new Scroll();
-// displayableBeingParsed = item;
-// dis_object.add(displayableBeingParsed);
-// bItem = true;
-// }
-// else if (qName.equalsIgnoreCase("ActionMessage"))
-// {
-// Action action = new Action();
-// dis_object.add(action);
-// bAction = true;
-// }
-        else if (qName.equalsIgnoreCase("Monster"))
-        {
-// String type = attributes.getValue("type");
-// String hp = attributes.getValue("hp");
-// String maxhit = attributes.getValue("maxhit");
-// displayableBeingParsed = new Monster();
-// dis_object.add(displayableBeingParsed);
-
+        } else if (qName.equalsIgnoreCase("Monster")) {
             String name = attributes.getValue("name");
             String room = attributes.getValue("room");
             String serial = attributes.getValue("serial");
+            //String HP = attributes.getValue("hp");
             Monster monster1 = new Monster();
-// Item item = new Armor();
             monster1.setName(name);
+            //monster1.setHP(Integer.parseInt(HP.toString()));
             monster1.setID(Integer.parseInt(room.toString()), Integer.parseInt(serial.toString()));
             displayableBeingParsed = (Monster) monster1;
             dis_object.add(displayableBeingParsed);
@@ -267,75 +238,52 @@ public class DisplayableXMLHandler extends DefaultHandler {
             bCreature = true;
             bMonster = true;
 // bArmor = true;
-        }
-        else if (qName.equalsIgnoreCase("Player"))
-        {
-// displayableBeingParsed = new Player();
-// // String type = attributes.getValue("type");
-// dis_object.add(displayableBeingParsed);
-// bCreature = true;
-// bPlayer = true;
-
+        } else if (qName.equalsIgnoreCase("Player")) {
             String name = attributes.getValue("name");
             String room = attributes.getValue("room");
+            //String HP = attributes.getValue("hp");
             String serial = attributes.getValue("serial");
             Player player1 = new Player();
-// Item item = new Armor();
             player1.setName(name);
+            //player1.setHP(Integer.parseInt(HP.toString()));
             player1.setID(Integer.parseInt(room.toString()), Integer.parseInt(serial.toString()));
             displayableBeingParsed = (Player) player1;
             dis_object.add(displayableBeingParsed);
             creatureList.add(player1);
             bCreature = true;
             bPlayer = true;
-        }
-        else if (qName.equalsIgnoreCase("visible")) {
+        } else if (qName.equalsIgnoreCase("visible")) {
             bvisible = true;
-        }
-        else if (qName.equalsIgnoreCase("PosX")) {
+        } else if (qName.equalsIgnoreCase("PosX")) {
             bPosX = true;
-        }
-        else if (qName.equalsIgnoreCase("actionIntValue")) {
+        } else if (qName.equalsIgnoreCase("actionIntValue")) {
             bactionIntValue = true;
-        }
-        else if (qName.equalsIgnoreCase("actionCharValue")) {
+        } else if (qName.equalsIgnoreCase("actionCharValue")) {
             bactionCharValue = true;
-        }
-        else if (qName.equalsIgnoreCase("PosY")) {
+        } else if (qName.equalsIgnoreCase("PosY")) {
             bPosY = true;
 // System.out.println("--------------In Pos Y");
-        }
-        else if (qName.equalsIgnoreCase("hp")) {
+        } else if (qName.equalsIgnoreCase("hp")) {
 // System.out.print("--------------In HP\n");
             bhp = true;
-        }
-        else if (qName.equalsIgnoreCase("maxhit")) {
+        } else if (qName.equalsIgnoreCase("maxhit")) {
 // System.out.print("--------------In MaxHit\n");
             bmaxhit = true;
-        }
-        else if (qName.equalsIgnoreCase("ItemIntValue")) {
-            bIntValue= true;
-        }
-        else if (qName.equalsIgnoreCase("hpmoves")) {
+        } else if (qName.equalsIgnoreCase("ItemIntValue")) {
+            bIntValue = true;
+        } else if (qName.equalsIgnoreCase("hpmoves")) {
             bhpMoves = true;
-        }
-        else if (qName.equalsIgnoreCase("width")) {
+        } else if (qName.equalsIgnoreCase("width")) {
             bwidth = true;
-        }
-        else if (qName.equalsIgnoreCase("height")) {
+        } else if (qName.equalsIgnoreCase("height")) {
             bheight = true;
-        }
-        else if (qName.equalsIgnoreCase("type")) {
+        } else if (qName.equalsIgnoreCase("type")) {
             btype = true;
-        }
-        else if (qName.equalsIgnoreCase("actionIntValue")) {
-            bIntValue= true;
-        }
-        else if (qName.equalsIgnoreCase("actionMessage")) {
-            bAction= true;
-        }
-        else
-        {
+        } else if (qName.equalsIgnoreCase("actionIntValue")) {
+            bIntValue = true;
+        } else if (qName.equalsIgnoreCase("actionMessage")) {
+            bAction = true;
+        } else {
             System.out.println("Unknown qname: " + qName);
         }
         // displayableBeingParsed.visible = true;
@@ -347,90 +295,70 @@ public class DisplayableXMLHandler extends DefaultHandler {
         Displayable display = (Displayable) displayableBeingParsed;
         Action action;
 // display = (Displayable) displayableBeingParsed;
-        if(bvisible){displayableBeingParsed.setVisible(); bvisible = false;}
-        else if(bPosX)
-        {
+        if (bvisible) {
+            displayableBeingParsed.setVisible();
+            bvisible = false;
+        } else if (bPosX) {
             displayableBeingParsed.setPosX(Integer.parseInt(data.toString()));
             bPosX = false;
-            if(bPassage)
-            {
-                ((Passage)displayableBeingParsed).set_coordinatesx(Integer.parseInt(data.toString()));
+            if (bPassage) {
+                ((Passage) displayableBeingParsed).set_coordinatesx(Integer.parseInt(data.toString()));
             }
-        }
-        else if(bPosY)
-        {
+        } else if (bPosY) {
             displayableBeingParsed.setPosY(Integer.parseInt(data.toString()));
             bPosY = false;
-            if(bPassage)
-            {
-                ((Passage)displayableBeingParsed).set_coordinatesy(Integer.parseInt(data.toString()));
+            if (bPassage) {
+                ((Passage) displayableBeingParsed).set_coordinatesy(Integer.parseInt(data.toString()));
             }
+        } else if (btype) {
+            displayableBeingParsed.setType(data.toString());
+            btype = false;
+        } else if (bhp) {
+            int h = Integer.parseInt(data.toString());
+            ((Creature)displayableBeingParsed).setHP(h);
+            System.out.println(h+"HP HELP________");
+            displayableBeingParsed.setHp(h);
+            bhp = false;
         }
-        else if(btype){displayableBeingParsed.setType(data.toString()); btype = false;}
-        else if(bhp){displayableBeingParsed.setHp(Integer.parseInt(data.toString())); bhp = false;}
 // else{display.setInvisible();}
-        else if(bactionIntValue){actionBeingParsed.setIntValue(Integer.parseInt(data.toString())); bactionIntValue = false;}
-        else if(bactionCharValue){actionBeingParsed.setCharValue((data.toString().charAt(0))); bactionCharValue = false;}
-        else if(bmaxhit){displayableBeingParsed.setMaxHit(Integer.parseInt(data.toString())); bmaxhit = false;}
-        else if(bhpMoves){displayableBeingParsed.setHpMove(Integer.parseInt(data.toString())); bhpMoves = false;}
-        else if(bwidth){displayableBeingParsed.setWidth(Integer.parseInt(data.toString())); bwidth = false;}
-        else if(bheight){displayableBeingParsed.setHeight(Integer.parseInt(data.toString())); bheight = false;}
-// else if(bAction){
-// action = (Action) displayableBeingParsed;
-// action.setMessage(data.toString());
-// bAction = false;
-// }
-// else if(bIntValue){displayableBeingParsed.setIntValue(Integer.parseInt(data.toString())); bIntValue = false;}
-// else if(bheight){displayableBeingParsed.setHeight(Integer.parseInt(data.toString())); bheight = false;}
-        else if (bPassage)
-        {
+        else if (bactionIntValue) {
+            actionBeingParsed.setIntValue(Integer.parseInt(data.toString()));
+            bactionIntValue = false;
+        } else if (bactionCharValue) {
+            actionBeingParsed.setCharValue((data.toString().charAt(0)));
+            bactionCharValue = false;
+        } else if (bmaxhit) {
+            displayableBeingParsed.setMaxHit(Integer.parseInt(data.toString()));
+            bmaxhit = false;
+        } else if (bhpMoves) {
+            displayableBeingParsed.setHpMove(Integer.parseInt(data.toString()));
+            bhpMoves = false;
+        } else if (bwidth) {
+            displayableBeingParsed.setWidth(Integer.parseInt(data.toString()));
+            bwidth = false;
+        } else if (bheight) {
+            displayableBeingParsed.setHeight(Integer.parseInt(data.toString()));
+            bheight = false;
+        } else if (bPassage) {
             bPassage = false;
             displayableBeingParsed = null;
-        }
-// else if(bPosX)
-// {
-// display.setPosX(Integer.parseInt(data.toString()));
-// bPosX = false;
-// }
-        else if(bMonster)
-        {
-// display = (Displayable) displayableBeingParsed;
-// if(bPosX){display.setPosX(Integer.parseInt(data.toString())); bPosX = false;}
-// if(bPosY){display.setPosY(Integer.parseInt(data.toString())); bPosY = false;}
-// if(bvisible){display.setVisible(); bvisible = false;}
-// // else{display.setInvisible();}
-// if(bhp){display.setHp(Integer.parseInt(data.toString())); bhp = false;}
-// if(bhpMoves){display.setHpMove(Integer.parseInt(data.toString())); bhpMoves = false;}
+        } else if (bMonster) {
             bMonster = false;
             displayableBeingParsed = null;
-        }
-
-        else if (qName.equalsIgnoreCase("Armor"))
-        {
+        } else if (qName.equalsIgnoreCase("Armor")) {
             displayableBeingParsed = dis_object.get(dis_object.size() - 2);
-        }
-
-        else if(bPlayer)
-        {
+        } else if (bPlayer) {
             bPlayer = false;
-        }
-        else if (bCreature)
-        {
-            if(data.toString() != null && displayableBeingParsed != null)
-            {
+        } else if (bCreature) {
+            if (data.toString() != null && displayableBeingParsed != null) {
                 displayableBeingParsed.setType(data.toString());
             }
             bCreature = false;
-        }
-        else if (bItem)
-        {
-// System.out.print("ZZZ\n");
+        } else if (bItem) {
             displayableBeingParsed.setType(data.toString());
 
             bItem = false;
-        }
-        else if (bRoom)
-        {
+        } else if (bRoom) {
             bRoom = false;
             displayableBeingParsed = null;
         }
@@ -456,7 +384,8 @@ public class DisplayableXMLHandler extends DefaultHandler {
     public String toString() {
         String str = "DisplayableXMLHandler\n";
         for (int i = 0; i < dis_object.size(); i++) {
-            str += dis_object.get(i).toString() + "\n";;
+            str += dis_object.get(i).toString() + "\n";
+            ;
         }
         str += " bPosX: " + bPosX + "\n";
         str += " bPosY: " + bPosY + "\n";

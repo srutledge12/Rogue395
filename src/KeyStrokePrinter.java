@@ -16,6 +16,9 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
     public ArrayList<Displayable> inventory = new ArrayList<Displayable>();
     public ArrayList<Displayable> onPlayer = new ArrayList<Displayable>();
     private static AsciiPanel terminal;
+    private int player_id = -1; /////////////////////////////////////////////////////////////////////////////////////
+    private int player_x = -1; //////////////////////////////////////////////////////////////////////////////////////
+    private int player_y = -1;//
     public Random ran = new Random();
     
 
@@ -59,6 +62,11 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
 
             if(displayGrid.dis_object.get(i) instanceof Player)
             {
+
+                player_id = i;///////////////////////////////////////////////////////////////////////////////////////
+                player_x = displayGrid.dis_object.get(i).PosX;/////////////////////////////////////////////////////////////
+                player_y = displayGrid.dis_object.get(i).PosY;//
+
                 for(int k = 0; k < displayGrid.usedX.size()-1; k++)
                 {
                     if(displayGrid.dis_object.get(i).PosX + dx + displayGrid.startx == displayGrid.usedX.get(k) && displayGrid.dis_object.get(i).PosY + dy + displayGrid.starty == displayGrid.usedY.get(k)){
@@ -66,7 +74,7 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
                         displayGrid.dis_object.get(i).setPosX(newX);
                         newY = displayGrid.dis_object.get(i).PosY + dy;
                         displayGrid.dis_object.get(i).setPosY(newY);
-                        
+                        compare(newX, newY);
                         break;
                     }
                     
@@ -397,6 +405,70 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
         return true;
     }
     
+    public void hit(Monster monster, Player player) ///////////////////////////////////////////////////////////////////
+    {
+
+        int hit_p = 0;
+        int hit_m = 0;
+        if(Player.sword == null)
+        {
+            hit_p = ran.nextInt(player.maxHit+1);
+        }
+        else
+        {
+            hit_p = ran.nextInt(player.maxHit + Player.sword.intValue + 1);
+        }
+        hit_m = ran.nextInt(monster.maxHit+1);
+        if(Player.armor == null)
+        {
+            player.Hp -= hit_m;
+        }
+        else
+        {
+            player.Hp = player.Hp + Player.armor.intValue - hit_m;
+        }
+        monster.Hp -= hit_p;
+        if(player.Hp <= 0)
+        {
+            displayGrid.endGame();
+            System.out.println("Game Over");
+            terminal.write("info:  ", 19, 35);
+        }
+        if(monster.Hp <= 0)
+        {
+            int length = (displayGrid.dis_object).size();
+        
+            for(int i = 0; i < length - 1; i++)
+            {
+                if(displayGrid.dis_object.get(i) == monster)
+                {
+                    System.out.println("Dead Monster");
+                }
+            }
+            //System.out.println(monster.DA_list.get(monster.win).msg);
+        }
+        //System.out.println("Player: "+hit_m+" Monster: "+hit_p);
+        //System.out.println(player.Hp);
+
+        return;
+    }
+
+    public void compare(int newx, int newy)///////////////////////////////////////////////////////////////////////////
+    {
+        for(int x = 0; x < displayGrid.m_list.size(); x++)
+        {
+            if(((Monster) displayGrid.m_list.get(x)).s_x == newx && ((Monster) displayGrid.m_list.get(x)).s_y == newy)
+            {
+                hit(((Monster) displayGrid.m_list.get(x)), (Player) displayGrid.dis_object.get(player_id));
+                displayGrid.dis_object.get(player_id).PosX = player_x;
+                displayGrid.dis_object.get(player_id).PosY = player_y;
+                break;
+
+            }
+        }
+        return;
+    }
+
     @Override
     public void run() {
         displayGrid.registerInputObserver(this);

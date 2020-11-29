@@ -1,28 +1,38 @@
+import java.util.ArrayList;
+
 // package src;
 public class Creature extends Displayable{
-    private int Hp;
-    private int HpMoves;
+    public int Hp;
+    public int HpMoves;
     public CreatureAction DeathAction;
-    public String HitAction;
+    public ArrayList<CreatureAction> HA_list = new ArrayList<>();
+    public ArrayList<CreatureAction> DA_list = new ArrayList<>();
     public Player[ ] players;
     public Monster[ ] monsters;
+    public int win = 0;
+    public int check = 0;
 
-    /*public Creature(String _name, int _numPlayers, int _numMonsters) {
-        name = _name;
-        numActivities = _numActivities;
-        activities = new Activity[numActivities];
-    }*/
 
-    public void setHp(int _Hp) {
-        // Hp = _Hp;
+    public void setHP(int _Hp) {
+         Hp = _Hp;
     }
 
     public void setHpMoves(int _HpMoves) {
         // HpMoves = _HpMoves;
     }
 
-    public void setAction(CreatureAction _DeathAction) {
-        DeathAction = _DeathAction;
+    public void setDeathAction(CreatureAction _DeathAction)
+    {
+        check++;
+        if(_DeathAction.name == "YouWin")
+        {
+          win = check;
+        }
+
+        DA_list.add(_DeathAction);
+    }
+    public void setHitAction(CreatureAction _HitAction) {
+        HA_list.add(_HitAction);
     }
 
 }

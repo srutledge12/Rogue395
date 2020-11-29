@@ -25,6 +25,7 @@ public class ObjectDisplayGrid extends JFrame implements KeyListener, InputSubje
     public static int startx = -1;
     public static int starty = -1;
     public boolean hall = false;
+    public ArrayList<Displayable> m_list = new ArrayList<Displayable>();/////////////////////////////////////////////////////////
     // public ArrayList<Displayable> items = new ArrayList<Displayable>();
     // public ArrayList<Displayable> inventory = new ArrayList<Displayable>();
     //private Stack<Displayable>[][] objectGrid = null; // note change in this line
@@ -142,6 +143,7 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
     public final void initializeDisplay()
     {
         // terminal.clear();
+        int hp = 0;
         Char ch = new Char('.');
         for (int i = 0; i < dis_object.size(); i++)
         {
@@ -244,14 +246,10 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
 
 
             }
-            else if(dis_object.get(i) instanceof Monster)
-            {
-                for (int z = 0; z < room_list.size(); z++)
-                {
-                    if(room_list.get(z) instanceof Room)
-                    {
-                        if(((Monster)dis_object.get(i)).room == room_list.get(z).room)
-                        {
+            else if (dis_object.get(i) instanceof Monster) {///////////////////////////////////////////////////////////////////////////
+                for (int z = 0; z < room_list.size(); z++) {
+                    if (room_list.get(z) instanceof Room) {
+                        if (((Monster) dis_object.get(i)).room == room_list.get(z).room) {
                             startx = room_list.get(z).PosX;
                             starty = room_list.get(z).PosY;
                             break;
@@ -260,15 +258,15 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                 }
                 ch = new Char(dis_object.get(i).type.charAt(0));
                 addObjectToDisplay(ch, dis_object.get(i).PosX + startx, dis_object.get(i).PosY + starty);
-            }
-            else if(dis_object.get(i) instanceof Player)
-            {
-                for (int z = 0; z < room_list.size(); z++)
-                {
-                    if(room_list.get(z) instanceof Room)
-                    {
-                        if(((Player)dis_object.get(i)).room == room_list.get(z).room)
-                        {
+
+                ((Monster) dis_object.get(i)).s_x = dis_object.get(i).PosX + startx;
+                ((Monster) dis_object.get(i)).s_y = dis_object.get(i).PosY + starty;
+                ((Monster) dis_object.get(i)).index = i;
+                m_list.add(dis_object.get(i));
+            } else if (dis_object.get(i) instanceof Player) {
+                for (int z = 0; z < room_list.size(); z++) {
+                    if (room_list.get(z) instanceof Room) {
+                        if (((Player) dis_object.get(i)).room == room_list.get(z).room) {
                             startx = room_list.get(z).PosX;
                             // playerX = startx;
                             starty = room_list.get(z).PosY;
@@ -329,6 +327,12 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         // {
         //     hallucinate();
         // }
+
+        terminal.write("HP:  ", 10, 33);//////////////////////////////////////////////////////////////////
+        terminal.write((char) hp, 15, 33); /////////////////////////////////////////////////////////////////////
+        terminal.write("core:  ", 19, 33); ///////////////////////////////////////////////////////////////
+        terminal.write("info:  ", 10, 35); //
+
         terminal.repaint();
             
 
