@@ -442,7 +442,16 @@ public class KeyStrokePrinter implements InputObserver, Runnable {
             {
                 if(displayGrid.dis_object.get(i) == monster)
                 {
-                    System.out.println("Dead Monster");
+                    System.out.println("D Monster");
+                    displayGrid.dis_object.remove(i);
+                    monster.PosX = 99;
+                    monster.PosY = 99;
+                    if(inventory.size() > 0)
+                    {
+                        drop(1);
+                    }
+                    
+                    break;
                 }
             }
             //System.out.println(monster.DA_list.get(monster.win).msg);

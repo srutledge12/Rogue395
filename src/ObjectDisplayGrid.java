@@ -263,7 +263,9 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                 ((Monster) dis_object.get(i)).s_y = dis_object.get(i).PosY + starty;
                 ((Monster) dis_object.get(i)).index = i;
                 m_list.add(dis_object.get(i));
-            } else if (dis_object.get(i) instanceof Player) {
+            } 
+            
+            else if (dis_object.get(i) instanceof Player) {
                 for (int z = 0; z < room_list.size(); z++) {
                     if (room_list.get(z) instanceof Room) {
                         if (((Player) dis_object.get(i)).room == room_list.get(z).room) {
@@ -275,6 +277,7 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
                         }
                     }
                 }
+                hp = ((Player) dis_object.get(i)).Hp;
                 ch = new Char('@');
                 // addObjectToDisplay(ch, dis_object.get(i).PosX + startx, dis_object.get(i).PosY + starty);
                 // for(int k = 0; k < usedX.size()-1; k++)
@@ -328,8 +331,9 @@ if (Burger.isInstance(myFoods[0])) { //check that the Food is a Burger
         //     hallucinate();
         // }
 
-        terminal.write("HP:  ", 10, 33);//////////////////////////////////////////////////////////////////
-        terminal.write((char) hp, 15, 33); /////////////////////////////////////////////////////////////////////
+        System.out.println(hp);
+        terminal.write("HP: " + String.valueOf(hp), 10, 33);//////////////////////////////////////////////////////////////////
+        // terminal.write(Integer.toString(hp) , 15, 33); /////////////////////////////////////////////////////////////////////
         terminal.write("core:  ", 19, 33); ///////////////////////////////////////////////////////////////
         terminal.write("info:  ", 10, 35); //
 
